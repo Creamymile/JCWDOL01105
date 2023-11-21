@@ -2,7 +2,7 @@
 module.exports = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './components/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
@@ -17,8 +17,9 @@ module.exports = {
       color: {
         primary: '#eeeeee',
         accent: '#703eb0',
-        secondary: '#393e46',
-        dark: '#ededed',
+        secondary: '#0000',
+        dark: '#000',
+        neutral: '#a4a6a5',
         pallete1: '#4a785e',
         pallete2: '#fefae1',
         pallete3: '#b4daa7',

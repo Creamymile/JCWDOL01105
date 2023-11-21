@@ -4,18 +4,10 @@ const Footer = () => {
   return (
     <footer className="footer footer-center p-5 bg-color-dark text-base-content">
       <nav className="grid grid-flow-col gap-10 justify-center">
-        <Link href="/" className="link link-hover">
-          Contact
-        </Link>
-        <Link href="/" className="link link-hover">
-          Jobs
-        </Link>
-        <Link href="/" className="link link-hover">
-          About us
-        </Link>
-        <Link href="/" className="link link-hover">
-          Press kit
-        </Link>
+        <Link href="/contact">Contact</Link>
+        <Link href="/">Jobs</Link>
+        <Link href="/">About us</Link>
+        <Link href="/">Press kit</Link>
       </nav>
       <nav>
         <div className="grid grid-flow-col justify-center gap-10">
