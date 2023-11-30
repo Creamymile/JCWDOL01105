@@ -1,3 +1,4 @@
+'use client';
 import React, { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import YupPassword from 'yup-password';
@@ -71,31 +72,6 @@ const FormLogin = ({ showToast }) => {
   const googleAuth = () => {
     window.open('http://localhost:8080/api/auth/google', '_self');
   };
-
-  // const googleAuth = async () => {
-  //   try {
-  //     // Lakukan autentikasi Google
-  //     const response = await fetch('http://localhost:8080/api/auth/google', {
-  //       method: 'GET',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //     });
-
-  //     // Dapatkan token dari respons server
-  //     const data = await response.json();
-
-  //     // Simpan token ke localStorage jika token ada di respons
-  //     if (data && data.token) {
-  //       localStorage.setItem('googleToken', data.token);
-  //       // Lakukan tindakan lain yang Anda butuhkan setelah menyimpan token
-  //       // misalnya redirect atau menampilkan pesan ke pengguna
-  //     }
-  //   } catch (error) {
-  //     console.error('Gagal melakukan autentikasi Google:', error.message);
-  //     // Handle kesalahan jika ada
-  //   }
-  // };
 
   const handleGoogleAuthSuccess = () => {
     // Lakukan permintaan ke endpoint yang menangani autentikasi Google

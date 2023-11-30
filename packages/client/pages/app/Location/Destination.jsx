@@ -1,8 +1,10 @@
+import Image from 'next/image';
+import Link from 'next/link';
 import Marquee from 'react-fast-marquee';
 
 const Destination = () => {
   return (
-    <div className="marquee absolute flex justify-center align-center">
+    <div className="marquee">
       <h5 className="font-bold text-sm ">Featured Place</h5>
       <Marquee pauseOnHover={true} direction="right" speed={75}>
         <div className="gap-10 flex justify-center items-center">

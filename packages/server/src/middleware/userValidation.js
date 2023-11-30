@@ -108,7 +108,35 @@ const userValidationLogin = () => {
   ]);
 };
 
+const userProfileValidation = () => {
+  return validate([
+    check('name').optional().notEmpty().withMessage('Name is required'),
+
+    check('email')
+      .optional()
+      .notEmpty()
+      .withMessage('Email is required')
+      .isEmail()
+      .withMessage('Invalid email format'),
+
+    check('gender')
+      .optional()
+      .notEmpty()
+      .withMessage('Gender is required')
+      .isIn(['Male', 'Female', 'Other'])
+      .withMessage('Invalid gender'),
+
+    check('birthday')
+      .optional()
+      .notEmpty()
+      .withMessage('Birthday is required')
+      .isDate({ format: 'YYYY-MM-DD' })
+      .withMessage('Invalid date format. Use YYYY-MM-DD'),
+  ]);
+};
+
 module.exports = {
   userValidationRegister,
   userValidationLogin,
+  userProfileValidation,
 };

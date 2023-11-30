@@ -1,7 +1,10 @@
 'use strict';
 const { Model } = require('sequelize');
 const bcrypt = require('bcrypt');
-const { generateVerificationCode } = require('../utils/sendMail');
+const {
+  generateVerificationCode,
+  generateResetToken,
+} = require('../utils/sendMail');
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -12,6 +15,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      User.hasOne(models.User_Profile, {
+        foreignKey: 'user_id',
+      });
+    }
+    async generateResetPasswordToken() {
+      this.reset_password_token = generateResetToken();
+      this.reset_password_expires = new Date();
+      this.reset_password_expires.setMinutes(
+        this.reset_password_expires.getMinutes() + 30,
+      ); // Token berlaku selama 30 menit
+      await this.save();
+      return this.reset_password_token;
     }
   }
   User.init(
@@ -39,6 +54,15 @@ module.exports = (sequelize, DataTypes) => {
       verification_attempts: {
         type: DataTypes.INTEGER,
         defaultValue: 0,
+      },
+      new_password: {
+        type: DataTypes.STRING,
+      },
+      reset_password_token: {
+        type: DataTypes.STRING,
+      },
+      reset_password_expires: {
+        type: DataTypes.DATE,
       },
     },
     {

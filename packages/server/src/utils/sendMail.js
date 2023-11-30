@@ -1,5 +1,6 @@
 // utils/sendMail.js
 const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 require('dotenv').config();
 
 const transporter = nodemailer.createTransport({
@@ -38,7 +39,33 @@ async function mailVerificationCode(email, verification_code) {
   }
 }
 
+function generateResetToken() {
+  return crypto.randomBytes(20).toString('hex');
+}
+
+const mailResetPasswordLink = async (email, reset_password_token) => {
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: email,
+    subject: 'Reset Password',
+    html: `
+    <h1>Password Reset Request</h1>
+    <p>You've requested to reset your password. Click the link below to reset:</p>
+    <a href="${process.env.CLIENT_URL}/user/reset-password/${reset_password_token}">Reset Password</a>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('Reset password email sent successfully');
+  } catch (error) {
+    console.error('Error sending reset password email:', error);
+  }
+};
+
 module.exports = {
   generateVerificationCode,
   mailVerificationCode,
+  mailResetPasswordLink,
+  generateResetToken,
 };

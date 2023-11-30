@@ -14,7 +14,7 @@ const validationLogin = Yup.object().shape({
     .required('Email is required'),
 });
 
-const FormsendOtp = ({ showToast }) => {
+const FormForgotPassword = ({ showToast }) => {
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
@@ -24,26 +24,29 @@ const FormsendOtp = ({ showToast }) => {
     validationSchema: validationLogin,
     onSubmit: async (values) => {
       try {
-        const response = await api.post('/auth/resend', {
+        const response = await api.post('/auth/reset-password/request', {
           email: values.email,
         });
-        console.log('Send Otp Success', response.data);
+        console.log(
+          'Send Reset Password Success, Cek Your Email',
+          response.data,
+        );
         if (response && response.status === 200) {
-          console.log('Success Send Otp');
-          showToast('Success Send Otp', 'success');
-          setTimeout(() => {
-            router.push('/user/verify');
-            setTimeout(() => {
-              toast.dismiss();
-            }, 1000);
-          }, 1000);
+          console.log('Send Reset Password Success, Cek Your Email');
+          showToast('Send Reset Password Success, Cek Your Email', 'success');
         } else {
-          console.error('Send Otp Failed', response.data.message);
+          console.error('Send Reset Password Failed', response.data.message);
           showToast(response.data.message, 'error');
         }
       } catch (error) {
-        console.error('Send Otp Failed', error.response.data.message);
-        showToast(`Send Otp Failed: ${error.response.data.message}`, 'error');
+        console.error(
+          'Send Reset Password Failed',
+          error.response.data.message,
+        );
+        showToast(
+          `Send Reset Password Failed: ${error.response.data.message}`,
+          'error',
+        );
       }
     },
   });
@@ -60,7 +63,8 @@ const FormsendOtp = ({ showToast }) => {
         }}
       >
         <h2 className="text-2xl font-bold text-gray-900 text-center">
-          Get Your Activation OTP
+          Enter your email address and we will send you a link to reset your
+          password.
         </h2>
         <div>
           <label htmlFor="email" className="block text-sm  text-color-pallete3">
@@ -95,4 +99,4 @@ const FormsendOtp = ({ showToast }) => {
   );
 };
 
-export default FormsendOtp;
+export default FormForgotPassword;

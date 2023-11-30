@@ -1,3 +1,4 @@
+'use client';
 import React, { useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import YupPassword from 'yup-password';
@@ -20,14 +21,11 @@ const FormResendOtp = ({ showToast }) => {
     validationSchema: validationLogin,
     onSubmit: async (values) => {
       try {
-        console.log(values);
         const response = await api.post('/auth/verify', {
           verification_code: values.verification_code.toString(),
         });
 
-        console.log('Activation Success', response.data);
         if (response && response.status === 200) {
-          console.log('Activation Success');
           showToast('Activation Success', 'success');
           setTimeout(() => {
             router.push('/user/login');

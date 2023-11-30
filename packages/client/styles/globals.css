@@ -91,11 +91,6 @@
   transform: scale(1.1);
 }
 
-.search-body {
-  color: black;
-  width: 100%;
-}
-
 .side-btn:hover {
   transition: 0.2s;
   background-color: white;
@@ -119,7 +114,7 @@
 .footer {
   display: flex;
   flex-direction: column;
-  position: fixed;
+  position: relative;
   bottom: 0;
   width: 100%;
   min-width: 360px;

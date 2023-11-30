@@ -9,41 +9,59 @@ import { toast } from 'react-toastify';
 
 YupPassword(Yup);
 const validationLogin = Yup.object().shape({
-  email: Yup.string()
-    .email('Invalid email format')
-    .required('Email is required'),
+  password: Yup.string()
+    .minUppercase(1, 'Password must have at least 1 uppercase')
+    .minLowercase(1, 'Password must have at least 1 lowercase')
+    .minNumbers(1, 'Password must have at least 1 number')
+    .min(8, 'Password must be at least 8 characters long')
+    .required('Password is required'),
 });
 
-const FormsendOtp = ({ showToast }) => {
+const FormForgotPassword = ({ showToast }) => {
   const router = useRouter();
+  const [token, setToken] = useState('');
+
+  useEffect(() => {
+    const tokenFromUrl = window.location.href.split('/').pop();
+    if (tokenFromUrl) {
+      setToken(tokenFromUrl);
+    }
+    console.log(token);
+  }, []);
+
   const formik = useFormik({
     initialValues: {
-      email: '',
+      token: token,
       password: '',
     },
     validationSchema: validationLogin,
     onSubmit: async (values) => {
+      console.log('values', values);
       try {
-        const response = await api.post('/auth/resend', {
-          email: values.email,
+        const response = await api.post('/auth/reset-password', {
+          token,
+          newPassword: values.password,
         });
-        console.log('Send Otp Success', response.data);
+        console.log('Success create new password', response.data);
         if (response && response.status === 200) {
-          console.log('Success Send Otp');
-          showToast('Success Send Otp', 'success');
+          console.log('Success create new password', response.data);
+          showToast('Success create new password', 'success');
           setTimeout(() => {
-            router.push('/user/verify');
+            router.push('/user/login');
             setTimeout(() => {
               toast.dismiss();
             }, 1000);
           }, 1000);
         } else {
-          console.error('Send Otp Failed', response.data.message);
+          console.error('Cannot create new password', response.data.message);
           showToast(response.data.message, 'error');
         }
       } catch (error) {
-        console.error('Send Otp Failed', error.response.data.message);
-        showToast(`Send Otp Failed: ${error.response.data.message}`, 'error');
+        console.error(
+          'Cannot create new password',
+          error.response.data.message,
+        );
+        showToast(`Error: ${error.response.data.message}`, 'error');
       }
     },
   });
@@ -60,26 +78,29 @@ const FormsendOtp = ({ showToast }) => {
         }}
       >
         <h2 className="text-2xl font-bold text-gray-900 text-center">
-          Get Your Activation OTP
+          Create a New Password
         </h2>
         <div>
-          <label htmlFor="email" className="block text-sm  text-color-pallete3">
-            Email address
+          <label
+            htmlFor="password"
+            className="block text-sm  text-color-pallete3"
+          >
+            New Password
           </label>
           <input
-            id="email"
-            name="email"
-            type="email"
-            placeholder="your@email.com"
-            autoComplete="email"
+            id="password"
+            name="password"
+            type="password"
+            placeholder="********"
+            autoComplete="current-password"
             required
-            value={formik.values.email}
+            value={formik.values.password}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
             className="w-full rounded-md border-gray-300 py-2 px-3 text-gray-900 shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
           />
-          {formik.touched.email && formik.errors.email ? (
-            <div className="text-red-500">{formik.errors.email}</div>
+          {formik.touched.password && formik.errors.password ? (
+            <div className="text-red-500">{formik.errors.password}</div>
           ) : null}
         </div>
         <div>
@@ -95,4 +116,4 @@ const FormsendOtp = ({ showToast }) => {
   );
 };
 
-export default FormsendOtp;
+export default FormForgotPassword;

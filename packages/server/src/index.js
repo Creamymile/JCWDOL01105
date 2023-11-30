@@ -6,7 +6,7 @@ const { join } = require('path');
 const session = require('express-session');
 const passport = require('passport');
 const router = require('./routes');
-const propertyRouter = require('./routes/propertyRouter');
+const path = require('path');
 
 const PORT = process.env.CUSTOM_PORT;
 const app = express();
@@ -25,9 +25,13 @@ app.use(passport.session());
 
 app.use(cors());
 
+app.use(
+  '/src/public/profile',
+  express.static(path.join('./src/public/profile')),
+);
+
 app.use(express.json());
 app.use('/api', router);
-app.use('/api', propertyRouter);
 
 app.get('/api', (req, res) => {
   res.send(`Hello, this is my API`);
