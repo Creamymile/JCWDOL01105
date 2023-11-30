@@ -1,10 +1,25 @@
 import axios from 'axios';
 
 export const API_URL =
-  process.env.NEXT_PUBLIC_API || 'http://localhost:8000/api';
+  process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080/api';
 
-const axiosInstance = axios.create({
+const api = axios.create({
   baseURL: API_URL,
 });
 
-export default axiosInstance;
+api.interceptors.request.use(
+  function (config) {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      config.headers.Authorization = 'Bearer ' + token;
+    }
+
+    return config;
+  },
+  function (error) {
+    return Promise.reject(error);
+  },
+);
+
+export default api;
